@@ -19,8 +19,8 @@
     "full": "TODO: add full description here"
   },
   "icons": {
-    "outline": "icon-outline.png",
-    "color": "icon-color.png"
+    "outline": "talktosme-32.png",
+    "color": "talktosme.png"
   },
   "accentColor": "#D85028",
   "configurableTabs": [],
