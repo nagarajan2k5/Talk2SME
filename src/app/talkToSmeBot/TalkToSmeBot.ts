@@ -82,7 +82,7 @@ export class TalkToSmeBot extends TeamsActivityHandler {
             if (added && added[0]) {
                 await context.sendActivity({
                     textFormat: "xml",
-                    text: `That was an interesting reaction (<b>${added[0].type}</b>)`
+                    text: `Thank you! That was an interesting reaction (<b>${added[0].type}</b>)`
                 });
             }
         });;
