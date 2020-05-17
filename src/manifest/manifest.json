@@ -1,0 +1,83 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.5",
+  "id": "9e7b1db0-97a8-11ea-9dd1-ebcf2e43a981",
+  "version": "0.0.1",
+  "packageName": "msteamsappstalktosme",
+  "developer": {
+    "name": "msnextlife",
+    "websiteUrl": "https://{{HOSTNAME}}",
+    "privacyUrl": "https://{{HOSTNAME}}/privacy.html",
+    "termsOfUseUrl": "https://{{HOSTNAME}}/tou.html"
+  },
+  "name": {
+    "short": "TalkToSME",
+    "full": "TalkToSME"
+  },
+  "description": {
+    "short": "TODO: add short description here",
+    "full": "TODO: add full description here"
+  },
+  "icons": {
+    "outline": "icon-outline.png",
+    "color": "icon-color.png"
+  },
+  "accentColor": "#D85028",
+  "configurableTabs": [],
+  "staticTabs": [],
+  "bots": [
+    {
+      "botId": "{{MICROSOFT_APP_ID}}",
+      "needsChannelSelector": true,
+      "isNotificationOnly": false,
+      "scopes": [
+        "team",
+        "personal"
+      ],
+      "commandLists": [
+        {
+          "scopes": [
+            "team",
+            "personal"
+          ],
+          "commands": [
+            {
+              "title": "Help",
+              "description": "Shows help information"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "connectors": [],
+  "composeExtensions": [
+    {
+      "botId": "{{MICROSOFT_APP_ID}}",
+      "canUpdateConfiguration": false,
+      "commands": [
+        {
+          "id": "projectsMessageExtension",
+          "title": "Projects",
+          "description": "Add a clever description here",
+          "initialRun": true,
+          "parameters": [
+            {
+              "name": "parameter",
+              "description": "Description of the parameter",
+              "title": "Parameter"
+            }
+          ],
+          "type": "query"
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "{{HOSTNAME}}"
+  ]
+}
