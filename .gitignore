@@ -15,3 +15,6 @@ dist
 
 #do not include temp
 temp
+
+#do not incldue cert
+cert

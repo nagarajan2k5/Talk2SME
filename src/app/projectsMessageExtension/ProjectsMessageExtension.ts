@@ -2,6 +2,7 @@ import * as debug from "debug";
 import { PreventIframe } from "express-msteams-host";
 import { TurnContext, CardFactory, MessagingExtensionQuery, MessagingExtensionResult } from "botbuilder";
 import { IMessagingExtensionMiddlewareProcessor } from "botbuilder-teams-messagingextensions";
+import TechnologyCards from "../TechnologyCards";
 
 // Initialize debug logging module
 const log = debug("msteams");
@@ -10,6 +11,7 @@ const log = debug("msteams");
 export default class ProjectsMessageExtension implements IMessagingExtensionMiddlewareProcessor {
 
     public async onQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<MessagingExtensionResult> {
+        
         const card = CardFactory.adaptiveCard(
             {
                 type: "AdaptiveCard",
@@ -60,24 +62,24 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
-                attachments: [
-                    { ...card, preview }
-                ]
+                attachments: TechnologyCards
             } as MessagingExtensionResult);
         } else {
             // the rest
+            if(query.parameters && query.parameters[0]){
+            var queryString = query.parameters[0].value || "";
+            }
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
-                attachments: [
-                    { ...card, preview }
-                ]
+                attachments: TechnologyCards.filter(c => c.content.title ? c.content.title.toLowerCase().includes(queryString.toLowerCase()):true)
             } as MessagingExtensionResult);
         }
     }
 
     public async onCardButtonClicked(context: TurnContext, value: any): Promise<void> {
         // Handle the Action.Submit action on the adaptive card
+        log(`I got this ${value.id}`);
         if (value.action === "moreDetails") {
             log(`I got this ${value.id}`);
         }
