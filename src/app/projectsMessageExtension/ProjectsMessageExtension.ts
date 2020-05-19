@@ -12,50 +12,6 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
 
     public async onQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<MessagingExtensionResult> {
         
-        const card = CardFactory.adaptiveCard(
-            {
-                type: "AdaptiveCard",
-                body: [
-                    {
-                        type: "TextBlock",
-                        size: "Large",
-                        text: "Headline"
-                    },
-                    {
-                        type: "TextBlock",
-                        text: "Description"
-                    },
-                    {
-                        type: "Image",
-                        url: `https://${process.env.HOSTNAME}/assets/icon.png`
-                    }
-                ],
-                actions: [
-                    {
-                        type: "Action.Submit",
-                        title: "More details",
-                        data: {
-                            action: "moreDetails",
-                            id: "1234-5678"
-                        }
-                    }
-                ],
-                $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
-                version: "1.0"
-            });
-        const preview = {
-            contentType: "application/vnd.microsoft.card.thumbnail",
-            content: {
-                title: "Headline",
-                text: "Description",
-                images: [
-                    {
-                        url: `https://${process.env.HOSTNAME}/assets/icon.png`
-                    }
-                ]
-            }
-        };
-
         if (query.parameters && query.parameters[0] && query.parameters[0].name === "initialRun") {
             // initial run
 
@@ -67,12 +23,15 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
         } else {
             // the rest
             if(query.parameters && query.parameters[0]){
-            var queryString = query.parameters[0].value || "";
+            var queryString = (query.parameters[0].value || "").toLowerCase();
             }
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
-                attachments: ProjectCards,
+                attachments: ProjectCards.filter(p => p.content.body[0].text ? 
+                    (p.content.body[0].text.toLowerCase().includes(queryString) || 
+                        p.content.body[3].text.toLowerCase().includes(queryString)):false
+                        ),
             } as MessagingExtensionResult);
         }
     }

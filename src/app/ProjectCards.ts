@@ -1,5 +1,9 @@
 // Project cards
+import * as debug from "debug"
 import ProjectData = require("../app/CardsSamples/ProjectInfoData.json");
+
+//logging module
+const log = debug("msteams");
 
 const ProjectCards = new Array<any>();
 
@@ -8,10 +12,10 @@ ProjectData.forEach(data => {
         contentType: "application/vnd.microsoft.card.thumbnail",
         content: {
             title: data.ProjectName,
-            text: data.Description,
+            text: data.TechnologyStack,
             images: [
                 {
-                    url: `https://picsum.photos/32/32?image=845`
+                    url: `https://www.vippng.com/png/detail/355-3555954_connect-icon-png-connected-icon.png` 
                 }
             ]
         }
@@ -104,8 +108,6 @@ ProjectData.forEach(data => {
 });
 
 export default ProjectCards;
-
-//ProjectCards.filter(c => c.content.body[0].content.text ? c.content.body[0].content.text.toLowerCase().includes(queryString.toLowerCase()):true)
 
 
 
