@@ -2,7 +2,7 @@ import * as debug from "debug";
 import { PreventIframe } from "express-msteams-host";
 import { TurnContext, CardFactory, MessagingExtensionQuery, MessagingExtensionResult } from "botbuilder";
 import { IMessagingExtensionMiddlewareProcessor } from "botbuilder-teams-messagingextensions";
-import TechnologyCards from "../TechnologyCards";
+import ProjectCards from "../ProjectCards"
 
 // Initialize debug logging module
 const log = debug("msteams");
@@ -62,7 +62,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
-                attachments: TechnologyCards
+                attachments: ProjectCards
             } as MessagingExtensionResult);
         } else {
             // the rest
@@ -72,7 +72,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
-                attachments: TechnologyCards.filter(c => c.content.title ? c.content.title.toLowerCase().includes(queryString.toLowerCase()):true)
+                attachments: ProjectCards,
             } as MessagingExtensionResult);
         }
     }

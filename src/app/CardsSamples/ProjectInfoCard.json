@@ -1,0 +1,81 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0",
+    "type": "AdaptiveCard",    
+    "body": [
+        {
+            "type": "TextBlock",
+            "text": "Project Title",
+            "weight": "bolder",
+            "isSubtle": false
+        },
+        {
+            "type": "TextBlock",
+            "text": "Problem Statement",
+            "separator": true
+        },
+        {
+            "type": "TextBlock",
+            "text": "Technology Stack",
+            "weight": "bolder",
+            "isSubtle": false
+        },
+        {
+            "type": "TextBlock",
+            "text": "technology1, technology 2 and so on",
+            "separator": true
+        },
+        {
+            "type": "TextBlock",
+            "text": "SME Contact",
+            "weight": "bolder",
+            "isSubtle": false
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://f1.pngfuel.com/png/323/743/633/icon-person-icon-design-symbol-avatar-silhouette-character-cartoon-head-png-clip-art.png",
+                            "size": "small",
+                            "style": "person"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Nagarajan Subramani",
+                            "weight": "bolder",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "spacing": "none",
+                            "text": "Created {{DATE(2020-05-18T06:08:39Z, SHORT)}}",
+                            "isSubtle": true,
+                            "wrap": true
+                        }
+                    ]
+                }
+            ]
+        }
+
+    ],
+    "actions": [
+    {
+      "type": "Action.Submit",
+      "title": "Talk to Me",
+      "data": {
+        "x": "nagarajan"
+      }
+    }
+  ]
+}
