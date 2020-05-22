@@ -36,7 +36,21 @@ ProjectData.forEach(data => {
                 {
                     "type": "TextBlock",
                     "text": data.Description,
-                    "separator": true
+                    "separator": true,
+                    "wrap": true
+                    
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "Domain",
+                    "weight": "bolder",
+                    "isSubtle": false
+                },
+                {
+                    "type": "TextBlock",
+                    "text": data.Domain,
+                    "separator": true,
+                    "wrap": true
                 },
                 {
                     "type": "TextBlock",
@@ -47,7 +61,8 @@ ProjectData.forEach(data => {
                 {
                     "type": "TextBlock",
                     "text": data.TechnologyStack,
-                    "separator": true
+                    "separator": true,
+                    "wrap": true
                 },
                 {
                     "type": "TextBlock",
@@ -57,6 +72,7 @@ ProjectData.forEach(data => {
                 },
                 {
                     "type": "ColumnSet",
+                    "separator": true,
                     "columns": [
                         {
                             "type": "Column",
@@ -97,8 +113,17 @@ ProjectData.forEach(data => {
                     "type": "Action.Submit",
                     "title": "Talk to Me",
                     "data": {
-                        "x": "nagarajan"
-                    }
+                        "btnTalkToSME": data
+                    },
+                    "id": "Talk to Me"
+                },
+                {
+                    "type": "Action.Submit",
+                    "title": "Request for Case Study",
+                    "data": {
+                        "btnCaseStudy": data
+                    },
+                    "id": "Request for Case Study"
                 }
             ]
         }

@@ -70,7 +70,7 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                         const dc = await this.dialogs.createContext(context);
                         await dc.beginDialog("help");
                     } else {
-                        await context.sendActivity(`I\'m terribly sorry, but my master hasn\'t trained me to do anything yet...`);
+                        await context.sendActivity(`My training is under progress to answer all your queries!`);
                     }
                     break;
                 default:

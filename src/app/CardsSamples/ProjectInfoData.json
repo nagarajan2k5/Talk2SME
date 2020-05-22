@@ -1,36 +1,64 @@
 [
   {
+    "ID" : "1",
     "ProjectName": "Talk to SME",
     "Description": "This app will help in finding an Expert within the Organization and helps to interact with them",
+    "Domain": "Healthcare, Insurance",
     "TechnologyStack": "Teams App, Messaging Extension, Node JS, Bot Framework",
     "SME": "Nagarajan Subramani, Bhanu Prasad Chintha",
     "CreatedOn": "Created {{DATE(2020-05-18T00:00:00Z, SHORT)}}"
   },
   {
+    "ID" : "2",
     "ProjectName": "Workplace Notifications App",
     "Description": "My Workspace, Next Gen Notification App Integrated with MSTeams that will get the Notifications/Incidents from multiple systems configured and show in Teams within a Tab",
+    "Domain": "Healthcare, Insurance",
     "TechnologyStack": "SPFx App, Teams App - Messaging extension",
     "SME": "Rajasekhar Varigonda, Yogendra Kumar Mahanta",
     "CreatedOn": "Created {{DATE(2020-05-17T00:00:00Z, SHORT)}}"
   },
   {
+    "ID" : "3",
     "ProjectName": "Fast Track Travel App",
     "Description": "This app will help to put travel request while on move",
+    "Domain": "Healthcare, Insurance",
     "TechnologyStack": "SPFx App, Teams App - Messaging extension",
     "SME": "Nikhil Sinha",
     "CreatedOn": "Created {{DATE(2020-05-16T00:00:00Z, SHORT)}}"
   },
   {
+    "ID" : "4",
     "ProjectName": "Project 1",
     "Description": "Proj 1 description",
+    "Domain": "Healthcare, Insurance",
     "TechnologyStack": "C#",
     "SME": "User1",
     "CreatedOn": "Created {{DATE(2020-05-18T00:00:00Z, SHORT)}}"
   },
   {
+    "ID" : "5",
     "ProjectName": "Project 2",
     "Description": "Project 2 description",
+    "Domain": "Healthcare, Insurance",
     "TechnologyStack": "ASP.Net",
+    "SME": "User2",
+    "CreatedOn": "Created {{DATE(2020-05-18T00:00:00Z, SHORT)}}"
+  },
+  {
+    "ID" : "6",
+    "ProjectName": "Project 3",
+    "Description": "Project 3 description",
+    "Domain": "Healthcare, Insurance",
+    "TechnologyStack": "Salesforce",
+    "SME": "User2",
+    "CreatedOn": "Created {{DATE(2020-05-18T00:00:00Z, SHORT)}}"
+  },
+  {
+    "ID" : "7",
+    "ProjectName": "Project 4",
+    "Description": "Project 4 description",
+    "Domain": "Healthcare, Insurance",
+    "TechnologyStack": "SAP, REST API",
     "SME": "User2",
     "CreatedOn": "Created {{DATE(2020-05-18T00:00:00Z, SHORT)}}"
   }
