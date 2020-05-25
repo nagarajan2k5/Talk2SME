@@ -21,7 +21,8 @@
     "express-msteams-host": "1.6.0",
     "express-session": "1.15.6",
     "morgan": "1.9.1",
-    "msteams-react-base-component": "2.0.0"
+    "msteams-react-base-component": "2.0.0",
+    "node-cache": "^5.1.0"
   },
   "devDependencies": {
     "@types/debug": "4.1.2",

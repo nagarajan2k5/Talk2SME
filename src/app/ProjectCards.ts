@@ -1,5 +1,5 @@
 // Project cards
-import * as debug from "debug"
+import * as debug from "debug";
 import ProjectData = require("../app/CardsSamples/ProjectInfoData.json");
 
 //logging module
