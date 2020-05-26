@@ -10,7 +10,7 @@ const log = debug("msteams");
 const ProjectCards = new Array<any>();
 
 let ProjectData = GraphProvider.getListItems("test");
-
+log(JSON.stringify(ProjectData));
 ProjectData.then((res) =>
     res.forEach(data => {
         const preview = {
@@ -137,7 +137,7 @@ ProjectData.then((res) =>
         ProjectCards.push({ ...card, preview });
     }));
 
-export default ProjectCards;
+    export default ProjectCards;
 
 
 

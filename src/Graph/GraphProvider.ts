@@ -35,20 +35,22 @@ export class GraphProvider {
             const client = new GraphClient(this.accessToken);
             result = await client.getListItems(listName);
             let lists: Array<IListItem> = new Array<IListItem>();
-            result.value.map((item: any) => {
-                lists.push({
-                    Id: item.fields.id,
-                    Title: item.fields.Title,
-                    Abstract: item.fields.Abstract,
-                    BusinessScenario: item.fields.BusinessScenario,
-                    SolnHighlights: item.fields.SolnHighlights,
-                    SMEContacts: item.fields.SMEContacts,
-                    Technology: item.fields.Technology,
-                    CaseStudyURL: item.fields.CaseStudyURL,
-                    CreatedOn: item.fields.Created
+            if (result.value) {
+                result.value.map((item: any) => {
+                    lists.push({
+                        Id: item.fields.id,
+                        Title: item.fields.Title,
+                        Abstract: item.fields.Abstract,
+                        BusinessScenario: item.fields.BusinessScenario,
+                        SolnHighlights: item.fields.SolnHighlights,
+                        SMEContacts: item.fields.SMEContacts,
+                        Technology: item.fields.Technology,
+                        CaseStudyURL: item.fields.CaseStudyURL,
+                        CreatedOn: item.fields.Created
+                    });
                 });
-            });
-            result = lists;            
+            }
+            result = lists;
         }
         else {
             //result = "not found";

@@ -52,8 +52,9 @@ export class GraphClient {
             throw new Error('Invalid `listName` parameter received.');
         }
         try {
-
-            let res = await this.graphClient.api('/sites/1976f49c-7a98-4f8b-8da4-18f0a2cdce89/lists/00cfb8d5-9e98-4fbf-889d-5fc351c6c30f/items/?expand=fields').get();
+            let apiURL = "/sites/" + (process.env.SPO_SITE_GUID || "") + "/lists/" + (process.env.SPO_LIST_GUID || "") + "/items/?expand=fields";
+            log(apiURL);
+            let res = await this.graphClient.api(apiURL).get();
             log("list found");
             return res;
         } catch (error) {
