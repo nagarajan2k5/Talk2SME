@@ -2,7 +2,7 @@
 import * as debug from "debug";
 import ProjectData = require("../app/CardsSamples/ProjectInfoData.json");
 
-//logging module
+//logging modulec declared
 const log = debug("msteams");
 
 const ProjectCards = new Array<any>();
