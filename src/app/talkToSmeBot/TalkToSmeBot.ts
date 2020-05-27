@@ -63,6 +63,7 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                 case ActivityTypes.Message:
                     let text = TurnContext.removeRecipientMention(context.activity);
                     text = text.toLowerCase();
+                    console.log("Onmessage bot: " + text);
                     if (text.startsWith("hello")) {
                         await context.sendActivity("Oh, hello to you as well!");
                         return;
