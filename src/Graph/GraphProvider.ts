@@ -64,9 +64,9 @@ export class GraphProvider {
         //const TOKEN_ENDPOINT = "https://login.microsoftonline.com/" + process.env.TENANT_ID + "/oauth2/v2.0/token";
         const TOKEN_ENDPOINT = (process.env.TOKEN_ENDPOINT || "").replace("tenatid", process.env.TENANT_ID || "");
         const postData = {
-            client_id: process.env.MICROSOFT_GRAPH_APP_ID,
+            client_id: process.env.MicrosoftAppId,
             scope: process.env.MS_GRAPH_SCOPE,
-            client_secret: process.env.MICROSOFT_GRAPH_APP_PASSWORD,
+            client_secret: process.env.MicrosoftAppPassword,
             grant_type: 'client_credentials'
         };
 

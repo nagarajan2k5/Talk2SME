@@ -5,6 +5,7 @@ import * as morgan from "morgan";
 import { MsTeamsApiRouter, MsTeamsPageRouter } from "express-msteams-host";
 import * as debug from "debug";
 import * as compression from "compression";
+import * as appInsights from "applicationinsights";
 
 
 
@@ -17,7 +18,8 @@ log(`Initializing Microsoft Teams Express hosted App...`);
 // tslint:disable-next-line:no-var-requires
 require("dotenv").config();
 
-
+// Set up app insights
+appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY).start();
 
 // The import of components has to be done AFTER the dotenv config
 import * as allComponents from "./TeamsAppsComponents";

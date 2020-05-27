@@ -28,8 +28,8 @@ var storage = new MemoryStorage();
 @BotDeclaration(
     "/api/messages",
     new MemoryStorage(),
-    process.env.MICROSOFT_APP_ID,
-    process.env.MICROSOFT_APP_PASSWORD)
+    process.env.MicrosoftAppId,
+    process.env.MicrosoftAppPassword)
 
 export class TalkToSmeBot extends TeamsActivityHandler {
     private readonly conversationState: ConversationState;

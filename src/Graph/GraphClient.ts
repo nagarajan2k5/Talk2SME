@@ -28,16 +28,16 @@ export class GraphClient {
      * @param {string} emailAddress Email address of the email's recipient.
      */
     public async userExists(emailAddress: string): Promise<boolean> {
-        log("client");
+        console.log("client");
         if (!emailAddress || !emailAddress.trim()) {
             throw new Error('Invalid `emailAddress` parameter received.');
         }
         try {
             const user: User = await this.graphClient.api(`/users/${emailAddress}`).get();
-            log("user found");
+            console.log("user found");
             return user ? true : false;
         } catch (error) {
-            log("user not found");
+            console.log("user not found");
             return false;
         }
     }
@@ -47,7 +47,7 @@ export class GraphClient {
     * @param {string} listName Email address of the email's recipient.
     */
     public async getListItems(listName: string): Promise<any> {
-        log("client");
+        console.log("client");
         if (!listName || !listName.trim()) {
             throw new Error('Invalid `listName` parameter received.');
         }
@@ -55,10 +55,10 @@ export class GraphClient {
             let apiURL = "/sites/" + (process.env.SPO_SITE_GUID || "") + "/lists/" + (process.env.SPO_LIST_GUID || "") + "/items/?expand=fields";
             log(apiURL);
             let res = await this.graphClient.api(apiURL).get();
-            log("list found");
+            console.log("list found");
             return res;
         } catch (error) {
-            log("list not found");
+            console.log("list not found");
             return false;
         }
     }
