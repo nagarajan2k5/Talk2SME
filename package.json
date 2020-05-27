@@ -22,6 +22,7 @@
     "express": "4.16.4",
     "express-msteams-host": "1.6.0",
     "express-session": "1.15.6",
+    "fs": "0.0.1-security",
     "morgan": "1.9.1",
     "msteams-react-base-component": "2.0.0",
     "node-cache": "^5.1.0",
