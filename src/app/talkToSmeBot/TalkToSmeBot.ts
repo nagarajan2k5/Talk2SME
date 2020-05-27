@@ -5,8 +5,6 @@ import { StatePropertyAccessor, CardFactory, TurnContext, MemoryStorage, Convers
 import HelpDialog from "./dialogs/HelpDialog";
 import ProjectsMessageExtension from "../projectsMessageExtension/ProjectsMessageExtension";
 import WelcomeCard from "./dialogs/WelcomeDialog";
-import { GraphProvider } from "../../Graph/GraphProvider";
-import {CosmosDbPartitionedStorage} from "botbuilder-azure"
 
 // Initialize debug logging module
 const log = debug("msteams");
@@ -64,9 +62,7 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                 case ActivityTypes.Message:
                     let text = TurnContext.removeRecipientMention(context.activity);
                     text = text.toLowerCase();
-                    console.log("Onmessage bot1.0: " + text);
-                    let t = GraphProvider.getListItems("test");
-                    console.log("Onmessage bot2.0: " + text);
+                    console.log("Onmessage bot: " + text);
                     if (text.startsWith("hello")) {
                         await context.sendActivity("Oh, hello to you as well!");
                         return;

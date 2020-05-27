@@ -13,8 +13,6 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
     public async onQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<MessagingExtensionResult> {
         
         if (query.parameters && query.parameters[0] && query.parameters[0].name === "initialRun") {
-            // initial run
-            console.log("Query String: "+ (query.parameters[0].value || "").toLowerCase());
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
@@ -25,7 +23,6 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
             if (query.parameters && query.parameters[0]) {
                 var queryString = (query.parameters[0].value || "").toLowerCase();
             }
-            console.log("Query String: "+ queryString);
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",

@@ -29,10 +29,8 @@ export class GraphProvider {
      * @param {string} listName The email address of the user.
      */
     public static async getListItems(listName: string): Promise<IListItem[]> {
-        console.log("getlist bot: " + listName);
         let result: any;
         this.accessToken = await this.getAccessToken();
-        console.log("received token" + this.accessToken);
         if (this.accessToken && this.accessToken != "error") {
             const client = new GraphClient(this.accessToken);
             result = await client.getListItems(listName);
@@ -63,7 +61,7 @@ export class GraphProvider {
 
     public static async getAccessToken(): Promise<any> {
         let result: any;
-        console.log("Token method");
+        console.log("getAccessToken method");
         //const TOKEN_ENDPOINT = "https://login.microsoftonline.com/" + process.env.TENANT_ID + "/oauth2/v2.0/token";
         const TOKEN_ENDPOINT = (process.env.TOKEN_ENDPOINT || "").replace("tenatid", process.env.TENANT_ID || "");
         const postData = {
