@@ -53,7 +53,7 @@ export class GraphClient {
         }
         try {
             let apiURL = "/sites/" + (process.env.SPO_SITE_GUID || "") + "/lists/" + (process.env.SPO_LIST_GUID || "") + "/items/?expand=fields";
-            log(apiURL);
+            console.log(apiURL);
             let res = await this.graphClient.api(apiURL).get();
             console.log("list found");
             return res;
