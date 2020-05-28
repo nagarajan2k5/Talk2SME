@@ -55,6 +55,7 @@ export class GraphClient {
             return res;
         } catch (error) {
             console.log("list not found");
+            console.log(error);
             return false;
         }
     }

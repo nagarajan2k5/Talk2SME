@@ -124,13 +124,10 @@ if (ProjectData) {
                             "id": "Talk to Me"
                         },
                         {
-                            "type": "Action.Submit",
-                            "title": "Request for Case Study",
-                            "data": {
-                                "btnCaseStudy": data
-                            },
-                            "id": "Request for Case Study"
-                        }
+                            "type": "Action.OpenUrl",
+                            "title": "Case Study",
+                            "url": data.CaseStudyURL
+                        },
                     ]
                 }
             };
