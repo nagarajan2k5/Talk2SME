@@ -1,7 +1,9 @@
 import { GraphClient } from './GraphClient';
+import { PnPJsClient } from "./PnPJsClient";
 import axios from "axios";
 import qs = require('qs');
 import { IListItem } from "./IListItem";
+import { IUserInfo } from "./IUserInfo";
 
 import * as debug from "debug";
 const log = debug("msteams");
@@ -26,15 +28,15 @@ export class GraphProvider {
         return result;
     }
     /**
-     * @param {string} listName The email address of the user.
+     * @param {string} keyWord The email address of the user.
      */
-    public static async getListItems(listName: string): Promise<IListItem[]> {
+    public static async getListItems(keyWord: string): Promise<IListItem[]> {
         let result: any;
         try {
             this.accessToken = await this.getAccessToken();
             if (this.accessToken && this.accessToken != "error") {
                 const client = new GraphClient(this.accessToken);
-                result = await client.getListItems(listName);
+                result = await client.getListItems(keyWord);
                 let lists: Array<IListItem> = new Array<IListItem>();
                 if (result.value) {
                     result.value.map((item: any) => {
@@ -71,6 +73,50 @@ export class GraphProvider {
 
         }
     }
+    /**
+         * @param {string} skills The email address of the user.
+         */
+    public static async searchPeopleBySkills(skills: string): Promise<IUserInfo[]> {
+        let users: Array<IUserInfo> = new Array<IUserInfo>();
+        try {
+
+            const clientId = process.env.MicrosoftAppId || "";
+            const clientSecret = process.env.MicrosoftAppPassword || "";
+            const siteURL = process.env.SPO_SITE_URL || "";
+
+            const client = new PnPJsClient(siteURL, clientId, clientSecret);
+
+            if (client) {
+                let result = await client.searchPeopleBySkills(skills);
+                //log("Result: " + JSON.stringify(result));
+                if (result) {
+                    result.PrimarySearchResults.map((item: any) => {
+                        //log("item: " + JSON.stringify(item));
+                        try {
+                            users.push({
+                                UserID: item.AccountName,
+                                FullName: item.PreferredName,
+                                EmailId: item.WorkEmail,
+                                Skills: item.Skills
+                                // SMEContacts: item.fields.SMEContacts.map((elem: any) => {
+                                //     return elem.Email;
+                                // }).join(", "),
+                            });
+                        } catch (error) {
+                            console.log("SPO Search on mapping the item ID:" + item.fields.id);
+                        }
+                    });
+                }
+
+                log("Users: " + JSON.stringify(users));
+                return users;
+            }
+        } catch (error) {
+            console.log("SPO search item mapping error : ");
+            console.log(error);
+        }
+        return users;
+    }
 
     public static async getAccessToken(): Promise<any> {
         try {
@@ -105,5 +151,15 @@ export class GraphProvider {
             return "error on fetch Access Token";
 
         }
+    }
+
+    public static async getSPOClient(): Promise<PnPJsClient> {
+        let client: PnPJsClient;
+        let clientId = process.env.MicrosoftAppId || "";
+        let clientSecret = process.env.MicrosoftAppPassword || "";
+        let siteURL = process.env.SPO_SITE_URL || "";
+
+        client = new PnPJsClient(siteURL, clientId, clientSecret);
+        return client;
     }
 }

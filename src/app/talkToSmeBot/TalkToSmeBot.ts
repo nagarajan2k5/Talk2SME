@@ -5,6 +5,7 @@ import { StatePropertyAccessor, CardFactory, TurnContext, MemoryStorage, Convers
 import HelpDialog from "./dialogs/HelpDialog";
 import ProjectsMessageExtension from "../projectsMessageExtension/ProjectsMessageExtension";
 import WelcomeCard from "./dialogs/WelcomeDialog";
+import { GraphProvider } from "../../Graph/GraphProvider";
 
 // Initialize debug logging module
 const log = debug("msteams");
@@ -56,7 +57,7 @@ export class TalkToSmeBot extends TeamsActivityHandler {
         // Set up the Activity processing
 
         this.onMessage(async (context: TurnContext): Promise<void> => {
-           
+
             // TODO: add your own bot logic in here
             switch (context.activity.type) {
                 case ActivityTypes.Message:
@@ -69,7 +70,15 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                     } else if (text.startsWith("help")) {
                         const dc = await this.dialogs.createContext(context);
                         await dc.beginDialog("help");
-                    } else {
+                    } else if (text.startsWith("search")) {
+                        let result = await GraphProvider.searchPeopleBySkills(text.split(' ')[1]);
+                        await context.sendActivity("Output: " + JSON.stringify(result));
+                    }
+                    else if (text.startsWith("list")) {
+                        let result = await GraphProvider.getListItems(text.split(' ')[1]);
+                        await context.sendActivity("Output: " + JSON.stringify(result));
+                    }
+                    else {
                         await context.sendActivity(`My training is under progress to answer all your queries!`);
                     }
                     break;
@@ -104,8 +113,8 @@ export class TalkToSmeBot extends TeamsActivityHandler {
 
         function addConversationReference(activity: Activity): void {
             const conversationReference = TurnContext.getConversationReference(activity);
-            if(conversationReference.conversation){
-            conversationReferences[conversationReference.conversation.id] = conversationReference;            
+            if (conversationReference.conversation) {
+                conversationReferences[conversationReference.conversation.id] = conversationReference;
             }
         }
     }
@@ -137,7 +146,7 @@ async function logMessageText(storage, turnContext) {
                 await turnContext.sendActivity(`Write failed of UtteranceLogJS: ${err}`);
             }
         }
-        else{
+        else {
             await turnContext.sendActivity(`Creating and saving new utterance log`);
             var turnNumber = 1;
             storeItems["UtteranceLogJS"] = { UtteranceList: [`${utterance}`], "eTag": "*", turnNumber }
@@ -153,7 +162,7 @@ async function logMessageText(storage, turnContext) {
             }
         }
     }
-    catch (err){
+    catch (err) {
         await turnContext.sendActivity(`Read rejected. ${err}`);
     }
 }

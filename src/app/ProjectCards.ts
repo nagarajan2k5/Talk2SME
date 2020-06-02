@@ -9,7 +9,7 @@ const log = debug("msteams");
 
 const ProjectCards = new Array<any>();
 
-let ProjectData = GraphProvider.getListItems("test");
+const ProjectData = GraphProvider.getListItems("nofilter");
 log(JSON.stringify(ProjectData));
 if (ProjectData) {
     ProjectData.then((res) =>

@@ -11,7 +11,7 @@ export class GraphClient {
 
     constructor(token: any) {
         if (!token || !token.trim()) {
-            throw new Error('SimpleGraphClient: Invalid token received.');
+            throw new Error('GraphClient: Invalid token received.');
         }
 
         this.token = token;
@@ -41,10 +41,10 @@ export class GraphClient {
 
     /**
     * Check if a user exists
-    * @param {string} listName Email address of the email's recipient.
+    * @param {string} keyWord Email address of the email's recipient.
     */
-    public async getListItems(listName: string): Promise<any> {
-        if (!listName || !listName.trim()) {
+    public async getListItems(keyWord: string): Promise<any> {
+        if (!keyWord || !keyWord.trim()) {
             throw new Error('Invalid `listName` parameter received.');
         }
         try {
@@ -59,4 +59,5 @@ export class GraphClient {
             return false;
         }
     }
+
 }
