@@ -27,6 +27,7 @@ export class GraphProvider {
         }
         return result;
     }
+
     /**
      * @param {string} keyWord The email address of the user.
      */
@@ -73,41 +74,31 @@ export class GraphProvider {
 
         }
     }
+
     /**
-         * @param {string} skills The email address of the user.
-         */
+     * @param {string} skill to search.
+     */
     public static async searchPeopleBySkills(skills: string): Promise<IUserInfo[]> {
         let users: Array<IUserInfo> = new Array<IUserInfo>();
         try {
-
-            const clientId = process.env.MicrosoftAppId || "";
-            const clientSecret = process.env.MicrosoftAppPassword || "";
-            const siteURL = process.env.SPO_SITE_URL || "";
-
-            const client = new PnPJsClient(siteURL, clientId, clientSecret);
-
+            const client = new PnPJsClient();
             if (client) {
                 let result = await client.searchPeopleBySkills(skills);
                 //log("Result: " + JSON.stringify(result));
                 if (result) {
                     result.PrimarySearchResults.map((item: any) => {
-                        //log("item: " + JSON.stringify(item));
                         try {
                             users.push({
                                 UserID: item.AccountName,
                                 FullName: item.PreferredName,
                                 EmailId: item.WorkEmail,
-                                Skills: item.Skills
-                                // SMEContacts: item.fields.SMEContacts.map((elem: any) => {
-                                //     return elem.Email;
-                                // }).join(", "),
+                                Skills: (item.Skills).replace(";", ", ")
                             });
                         } catch (error) {
                             console.log("SPO Search on mapping the item ID:" + item.fields.id);
                         }
                     });
                 }
-
                 log("Users: " + JSON.stringify(users));
                 return users;
             }
@@ -116,6 +107,32 @@ export class GraphProvider {
             console.log(error);
         }
         return users;
+    }
+
+    /**
+   * Check if a user exists
+   * @param {string} userId Email address of the email's recipient.
+   * @param {string} skill Skill to update
+   */
+    public static async updateSkillProficiency(userId: string, skill: string): Promise<any> {
+        let result: any;
+        try {
+            this.accessToken = await this.getAccessToken();
+            if (this.accessToken && this.accessToken != "error") {
+                const client = new GraphClient(this.accessToken);
+                result = await client.updateSkillProficiency(userId, skill);
+            }
+            else {
+                //result = "not found";
+                result = undefined;
+            }
+            return result;
+        } catch (error) {
+            console.log("List item mapping error : ");
+            console.log(error);
+            return result;
+
+        }
     }
 
     public static async getAccessToken(): Promise<any> {
@@ -151,15 +168,5 @@ export class GraphProvider {
             return "error on fetch Access Token";
 
         }
-    }
-
-    public static async getSPOClient(): Promise<PnPJsClient> {
-        let client: PnPJsClient;
-        let clientId = process.env.MicrosoftAppId || "";
-        let clientSecret = process.env.MicrosoftAppPassword || "";
-        let siteURL = process.env.SPO_SITE_URL || "";
-
-        client = new PnPJsClient(siteURL, clientId, clientSecret);
-        return client;
     }
 }

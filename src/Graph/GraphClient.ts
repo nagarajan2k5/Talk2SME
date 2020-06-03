@@ -59,5 +59,38 @@ export class GraphClient {
             return false;
         }
     }
+    /**
+    * Check if a user exists
+    * @param {string} userId Email address of the email's recipient.
+    * @param {string} skill Skill to update
+    */
+    public async updateSkillProficiency(userId: string, skill: string): Promise<any> {
+        if (!userId || !userId.trim() || !skill || !skill.trim()) {
+            throw new Error('Invalid `userId` or `skill` parameter received.');
+        }
+        try {
+            let apiURL = "/me/profile/skills/"+userId;
+            console.log(apiURL);
+
+            const skillProficiency = {
+                categories: [
+                  "professional" //personal, professional, hobby
+                ],
+                displayName: skill, 
+                proficiency: "expert", //elementary, limitedWorking, generalProfessional, advancedProfessional, expert, unknownFutureValue.
+                webUrl: ""
+              };
+
+            let res = await this.graphClient.api(apiURL).version('beta').update(skillProficiency);
+            console.log("skill updated");
+            console.log(res);
+            return res;
+        } catch (error) {
+            console.log("skill update failed");
+            console.log(error);
+            return false;
+        }
+    }
+
 
 }

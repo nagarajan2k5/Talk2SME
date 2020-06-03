@@ -78,6 +78,10 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                         let result = await GraphProvider.getListItems(text.split(' ')[1]);
                         await context.sendActivity("Output: " + JSON.stringify(result));
                     }
+                    else if (text.startsWith("update skill")) {                        
+                        let result = await GraphProvider.updateSkillProficiency("nagarajan_s05@msnextlife.onmicrosoft.com", text.split(' ')[2]);
+                        await context.sendActivity("Output: " + JSON.stringify(result));
+                    }
                     else {
                         await context.sendActivity(`My training is under progress to answer all your queries!`);
                     }

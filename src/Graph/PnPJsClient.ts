@@ -9,8 +9,14 @@ export class PnPJsClient {
 
     private token: any;
 
-    constructor(siteURL: string, clientId: string, clientSecret: string) {
+    constructor() {
+
+        const clientId = process.env.MicrosoftAppId || "";
+        const clientSecret = process.env.MicrosoftAppPassword || "";
+        const siteURL = process.env.SPO_SITE_URL || "";
+
         log("constructor: " + siteURL, clientId, clientSecret);
+
         sp.setup({
             sp: {
                 fetchClientFactory: () => {
@@ -34,11 +40,15 @@ export class PnPJsClient {
             console.log("SPO API Call");
             //const res = await sp.web.get();
             // URL: https://msnextlife.sharepoint.com/_api/search/query?querytext='Skills:*azure*'&sourceid='B09A7990-05EA-4AF9-81EF-EDFAB16C4E31'
+            // Search specific path, URL: https://msnextlife.sharepoint.com/_api/search/query?querytext='(zela)'&querytemplate='{searchTerms} path:"https://msnextlife.sharepoint.com/Lists/ProjectRepo"'&EnableQueryRules=false
 
             res = await sp.search({
                 Querytext: 'Skills:*' + skills + '*',
                 SourceId: 'B09A7990-05EA-4AF9-81EF-EDFAB16C4E31'
             });
+            
+            // const res1 = sp.profiles.setSingleValueProfileProperty("i:0#.f|membership|nagarajan_s05@msnextlife.onmicrosoft.com", "Skills", "PnP");
+            // console.log(res1);
             // Get user profile info
             // const profile = await sp.profiles.userProfile;
             // console.log(profile);
