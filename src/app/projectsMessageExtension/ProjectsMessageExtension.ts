@@ -65,6 +65,8 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                         p.content.body[1].text.toLowerCase().includes(keyWord) ||
                         p.content.body[3].text.toLowerCase().includes(keyWord) ||
                         p.content.body[5].text.toLowerCase().includes(keyWord)) : false);
+                
+                //Merging User details
                 let users = await this.getUsersCards(keyWord);
                 users.forEach(user => {
                     result.push(user);
@@ -148,7 +150,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                                             "items": [
                                                 {
                                                     "type": "TextBlock",
-                                                    "text": data.UserID,
+                                                    "text": data.EmailId,
                                                     "weight": "bolder",
                                                     "wrap": true
                                                 }
