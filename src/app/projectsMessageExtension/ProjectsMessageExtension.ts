@@ -97,7 +97,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                             text: data.Skills,
                             images: [
                                 {
-                                    url: `https://www.vippng.com/png/detail/355-3555954_connect-icon-png-connected-icon.png`
+                                    url: `https://f1.pngfuel.com/png/323/743/633/icon-person-icon-design-symbol-avatar-silhouette-character-cartoon-head-png-clip-art.png`
                                 }
                             ]
                         }
