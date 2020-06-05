@@ -21,7 +21,7 @@ if (ProjectData) {
                     text: data.Technology,
                     images: [
                         {
-                            url: `https://www.vippng.com/png/detail/355-3555954_connect-icon-png-connected-icon.png`
+                            url: `https://banner2.cleanpng.com/20180528/byz/kisspng-case-study-computer-icons-blockchain-technology-re-5b0c44c685ce95.4336176315275306945481.jpg`
                         }
                     ]
                 }
