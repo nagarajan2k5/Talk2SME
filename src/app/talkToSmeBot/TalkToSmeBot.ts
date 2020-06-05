@@ -70,8 +70,8 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                     } else if (text.startsWith("help")) {
                         const dc = await this.dialogs.createContext(context);
                         await dc.beginDialog("help");
-                    } else if (text.startsWith("search")) {
-                        let result = await GraphProvider.searchPeopleBySkills(text.split(' ')[1]);
+                    } else if (text.startsWith("search user")) {
+                        let result = await GraphProvider.searchPeopleBySkills(text.split(' ')[2]);
                         await context.sendActivity("Output: " + JSON.stringify(result));
                     }
                     else if (text.startsWith("list")) {
@@ -80,6 +80,10 @@ export class TalkToSmeBot extends TeamsActivityHandler {
                     }
                     else if (text.startsWith("update skill")) {                        
                         let result = await GraphProvider.updateSkillProficiency("nagarajan_s05@msnextlife.onmicrosoft.com", text.split(' ')[2]);
+                        await context.sendActivity("Output: " + JSON.stringify(result));
+                    }
+                    else if (text.startsWith("search project")) {                        
+                        let result = await GraphProvider.searchProjectsByKeyword(text.split(' ')[2]);
                         await context.sendActivity("Output: " + JSON.stringify(result));
                     }
                     else {

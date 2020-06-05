@@ -62,4 +62,32 @@ export class PnPJsClient {
         }
         return res;
     }
+
+    /**
+     * @param {string} keyword to search projects.
+     */
+    public async searchProjectsByKeyword(keyword: string): Promise<SearchResults> {
+        let res;
+        try {
+            if (!keyword) {
+                throw new Error('Invalid `keyword` parameter received.');
+            }
+            console.log("SPO API Call");
+            // Search specific path, URL: https://msnextlife.sharepoint.com/_api/search/query?querytext='(zela)'&querytemplate='{searchTerms} path:"https://msnextlife.sharepoint.com/Lists/ProjectRepo"'&EnableQueryRules=false
+
+            res = await sp.search({
+                Querytext: keyword + '*',
+                QueryTemplate: `{searchTerms} path:"https://msnextlife.sharepoint.com/Lists/ProjectRepo"`,
+                EnableQueryRules: false
+            });
+
+            console.log(JSON.stringify(res, null, 4));
+            console.log("Search count: " + JSON.stringify(res.RowCount));
+
+        } catch (error) {
+            console.log("searchPeopleBySkills method error");
+            console.log(error);
+        }
+        return res;
+    }
 }

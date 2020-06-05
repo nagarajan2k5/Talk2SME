@@ -4,6 +4,7 @@ import axios from "axios";
 import qs = require('qs');
 import { IListItem } from "./IListItem";
 import { IUserInfo } from "./IUserInfo";
+import { IProjectInfo } from "./IProjectInfo";
 
 import * as debug from "debug";
 const log = debug("msteams");
@@ -76,7 +77,7 @@ export class GraphProvider {
     }
 
     /**
-     * @param {string} skill to search.
+     * @param {string} skill to search users.
      */
     public static async searchPeopleBySkills(skills: string): Promise<IUserInfo[]> {
         let users: Array<IUserInfo> = new Array<IUserInfo>();
@@ -107,6 +108,46 @@ export class GraphProvider {
             console.log(error);
         }
         return users;
+    }
+
+    /**
+    * @param {string} keyword to search projects.
+    */
+    public static async searchProjectsByKeyword(keyword: string): Promise<IProjectInfo[]> {
+        let projs: Array<IProjectInfo> = new Array<IProjectInfo>();
+        try {
+            const client = new PnPJsClient();
+            if (client) {
+                console.log("Keyword: " + keyword);
+                let result = await client.searchProjectsByKeyword(keyword);
+                console.log("Result: " + JSON.stringify(result));
+                if (result) {
+                    result.PrimarySearchResults.map((item: any) => {
+                        try {
+                            projs.push({
+                                Id: item.Title,
+                                Title: item.Title,
+                                Abstract: item.Title,
+                                BusinessScenario: item.Title,
+                                SolnHighlights: item.Title,
+                                SMEContacts: item.Title,
+                                Technology: item.Title,
+                                CaseStudyURL: item.Title,
+                                CreatedOn: item.Title
+                            });
+                        } catch (error) {
+                            console.log("SPO Search on mapping the item ID:" + item.fields.id);
+                        }
+                    });
+                }
+                log("Projs: " + JSON.stringify(projs));
+                return projs;
+            }
+        } catch (error) {
+            console.log("SPO search item mapping error : ");
+            console.log(error);
+        }
+        return projs;
     }
 
     /**
