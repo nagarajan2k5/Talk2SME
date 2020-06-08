@@ -48,7 +48,7 @@ export class GraphClient {
             throw new Error('Invalid `listName` parameter received.');
         }
         try {
-            let apiURL = "/sites/" + (process.env.SPO_SITE_GUID || "") + "/lists/" + (process.env.SPO_LIST_GUID || "") + "/items/?expand=fields";
+            let apiURL = process.env.SPO_List_URL + "/items/?expand=fields";
             console.log(apiURL);
             let res = await this.graphClient.api(apiURL).get();
             console.log("list found");

@@ -85,7 +85,7 @@ export class PnPJsClient {
             console.log("Search count: " + JSON.stringify(res.RowCount));
 
         } catch (error) {
-            console.log("searchPeopleBySkills method error");
+            console.log("searchProjectBySkills method error");
             console.log(error);
         }
         return res;
