@@ -1,24 +1,33 @@
 import * as debug from "debug";
 import { PreventIframe } from "express-msteams-host";
-import { TurnContext, CardFactory, MessagingExtensionQuery, MessagingExtensionResult } from "botbuilder";
+import * as bot from "botbuilder";
 import { IMessagingExtensionMiddlewareProcessor } from "botbuilder-teams-messagingextensions";
 import ProjectCards from "../ProjectCards"
 import { GraphProvider } from "../../Graph/GraphProvider";
 
+import { createMeetingService } from "../../Services/createMeetingService";
+import { OnlineMeetingInput, OutlookEventInfo } from "../../Models/models";
+import * as moment from 'moment';
+
+import {conversationReferences} from "../talkToSmeBot/TalkToSmeBot"
+
+
 // Initialize debug logging module
 const log = debug("msteams");
+
+const connectionName: string = process.env.OAuthConnectionName || '';
 
 @PreventIframe("/projectsMessageExtension/config.html")
 export default class ProjectsMessageExtension implements IMessagingExtensionMiddlewareProcessor {
 
-    public async onQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<MessagingExtensionResult> {
-
+    public async onQuery(context: bot.TurnContext, query: bot.MessagingExtensionQuery): Promise<bot.MessagingExtensionResult> {
+        log("handler: onQuery");
         if (query.parameters && query.parameters[0] && query.parameters[0].name === "initialRun") {
             return Promise.resolve({
                 type: "result",
                 attachmentLayout: "list",
                 attachments: ProjectCards
-            } as MessagingExtensionResult);
+            } as bot.MessagingExtensionResult);
         } else {
             // the rest
             if (query.parameters && query.parameters[0]) {
@@ -28,44 +37,84 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                 type: "result",
                 attachmentLayout: "list",
                 attachments: await this.getProjectsandUsersCards(queryString)
-                // attachments: ProjectCards.filter(p => p.content.body[0].text ?
-                //     (p.content.body[0].text.toLowerCase().includes(queryString) ||
-                //         p.content.body[1].text.toLowerCase().includes(queryString) ||
-                //         p.content.body[3].text.toLowerCase().includes(queryString) ||
-                //         p.content.body[5].text.toLowerCase().includes(queryString)) : false
-                // ),
-            } as MessagingExtensionResult);
+            } as bot.MessagingExtensionResult);
         }
     }
 
-    public async onCardButtonClicked(context: TurnContext, value: any): Promise<void> {
+    public async onCardButtonClicked(context: bot.TurnContext, value: any): Promise<void> {
         // Handle the Action.Submit action on the adaptive card
-        log(`onCardButtonClicked, I got this ${value.id}`);
-        // if (value.action === "moreDetails") {
-        //     log(`I got this ${value.id}`);
-        // }
-        //log(JSON.stringify(context.activity));
+        log("handler: onCardButtonClicked" + JSON.stringify(value));
         let requestor = context.activity.from.name;
         let cardInfo = context.activity.value;
-        if (cardInfo) {
-            await context.sendActivity("Thank you " + requestor + ", we will process the request soon..!");
-        }
 
+        if (cardInfo) {
+            switch (cardInfo.commandId) {
+                case "Meeting":
+                    // let i: IUserTokenProvider;
+                    // i.getUserToken()
+                    // Get access token for user.if already authenticated, we will get token.
+                    // If user is not signed in, send sign in link in messaging extension.
+                    let magicCode = "154895";//context.activity.value?.state || '';
+                    //const conversationReference = bot.TurnContext.getConversationReference(activity);
+                    let conversationReference;
+                    for (conversationReference of Object.values(conversationReferences)) {
+                        if(conversationReference.conversation.id === context.activity.conversation.id){
+                            magicCode = conversationReference.magicCode;
+                            break;
+                        }
+                    }
+                    log("Msg Extension magicCode: "+ magicCode);
+                    var tokenResponse = await (context.adapter as any).getUserToken(context, connectionName, magicCode);                  
+                    log("Token JSON: " +JSON.stringify(tokenResponse));
+                    if (!tokenResponse) {
+                        log("Msg Extension: Sign in card");
+                        const signInLink: any = await (context.adapter as any).getSignInLink(context, connectionName);
+                        //send a sign in card!
+                        const attachment = bot.CardFactory.signinCard("Sign In", signInLink, "Please sign in to schedule a meeting with SME");
+                        const activity = bot.MessageFactory.attachment(attachment);
+                        await context.sendActivity(activity);
+                    }
+                    else {
+                        //send a meeting schedule confirm card!
+                        await context.sendActivity("Thank you " + requestor + ", we have scheduled the meeting! Please check the calendar");
+                        //Create a test meeting
+                        const service = createMeetingService();
+                        const startedAt = moment()
+                        log("startedAt" + JSON.stringify(startedAt));
+                        const meetingInput: OnlineMeetingInput = {
+                            startDateTime: startedAt.add(30, 'm'),
+                            endDateTime: startedAt.add(60, 'm'),
+                            subject: "TalkToSME: Online meeting with SME",
+                            smeEmailID: value.parameters.SMEContacts
+                        };
+
+                        const meetingInfo: OutlookEventInfo = await service.createMeeting(meetingInput, tokenResponse.token);
+                        //await context.sendActivity(JSON.stringify(meetingInfo));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
         return Promise.resolve();
     }
 
+    public async onSubmitAction(context: bot.TurnContext, value: bot.MessagingExtensionAction): Promise<bot.MessagingExtensionResult> {
+        log("handler: onSubmitAction");
+        return Promise.resolve({} as bot.MessagingExtensionResult);
+    }
+
     private async getProjectsandUsersCards(keyWord: string): Promise<any> {
+        log("method: getProjectsandUsersCards");
         let result;
         try {
             if (keyWord) {
-                log("getProjectsandUsersCards");
-
                 result = ProjectCards.filter(p => p.content.body[0].text ?
                     (p.content.body[0].text.toLowerCase().includes(keyWord) ||
                         p.content.body[1].text.toLowerCase().includes(keyWord) ||
                         p.content.body[3].text.toLowerCase().includes(keyWord) ||
                         p.content.body[5].text.toLowerCase().includes(keyWord)) : false);
-                
+
                 //Merging User details
                 let users = await this.getUsersCards(keyWord);
                 users.forEach(user => {
@@ -83,6 +132,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
     }
 
     private async getUsersCards(keyWord: string): Promise<any> {
+        log("method: getUsersCards");
         let result = new Array<any>();
         try {
             const users = await GraphProvider.searchPeopleBySkills(keyWord);
@@ -161,12 +211,27 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                             ],
                             "actions": [
                                 {
-                                    "type": "Action.Submit",
-                                    "title": "Talk to Me",
+                                    "type": "Action.OpenUrl",
+                                    "title": "Chat",
+                                    "url": "https://teams.microsoft.com/l/chat/0/0?users=" + data.EmailId,
                                     "data": {
                                         "btnTalkToSME": data
                                     },
-                                    "id": "Talk to Me"
+                                    "id": "Chat"
+                                },
+                                {
+                                    "type": "Action.Submit",
+                                    "title": "Meeting",
+                                    "data": {
+                                        "parameters": data,
+                                        "msteams": {
+                                            "type": "messageBack",
+                                            "displayText": "Meeting",
+                                            "text": "Meeting"
+                                        },
+                                        "commandId": "Meeting"
+                                    },
+                                    "id": "Meeting"
                                 }
                             ]
                         }

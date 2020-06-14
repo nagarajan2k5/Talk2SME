@@ -2,9 +2,7 @@ import { GraphClient } from './GraphClient';
 import { PnPJsClient } from "./PnPJsClient";
 import axios from "axios";
 import qs = require('qs');
-import { IListItem } from "./IListItem";
-import { IUserInfo } from "./IUserInfo";
-import { IProjectInfo } from "./IProjectInfo";
+import {IListItem, IUserInfo, IProjectInfo } from "../Models/models";
 
 import * as debug from "debug";
 const log = debug("msteams");
@@ -188,13 +186,13 @@ export class GraphProvider {
                 client_secret: process.env.MicrosoftAppPassword,
                 grant_type: 'client_credentials'
             };
-
+            console.log("Url: " + TOKEN_ENDPOINT);
             axios.defaults.headers.post['Content-Type'] =
                 'application/x-www-form-urlencoded';
             result = await axios
                 .post(TOKEN_ENDPOINT, qs.stringify(postData))
                 .then(response => {
-                    console.log("Token success");
+                    console.log("Token success: " + response.data.access_token);
                     return response.data.access_token;
                 })
                 .catch(error => {

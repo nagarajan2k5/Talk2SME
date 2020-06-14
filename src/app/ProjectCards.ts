@@ -3,7 +3,6 @@ import * as debug from "debug";
 //import ProjectData = require("../app/CardsSamples/ProjectInfoData.json");
 
 import { GraphProvider } from "../Graph/GraphProvider";
-import { IListItem } from "../Graph/IListItem";
 //logging modulec declared
 const log = debug("msteams");
 
@@ -116,12 +115,27 @@ if (ProjectData) {
                     ],
                     "actions": [
                         {
-                            "type": "Action.Submit",
-                            "title": "Talk to Me",
+                            "type": "Action.OpenUrl",
+                            "title": "Chat",
+                            "url": "https://teams.microsoft.com/l/chat/0/0?users=" + data.SMEContacts,
                             "data": {
                                 "btnTalkToSME": data
                             },
-                            "id": "Talk to Me"
+                            "id": "Chat"
+                        },
+                        {
+                            "type": "Action.Submit",
+                            "title": "Meeting",
+                            "data": {
+                                "parameters": data,
+                                "msteams": {
+                                    "type": "messageBack",
+                                    "displayText": "Meeting",
+                                    "text": "Meeting"
+                                  },
+                                  "commandId": "Meeting"
+                            },
+                            "id": "Meeting"
                         },
                         {
                             "type": "Action.OpenUrl",
