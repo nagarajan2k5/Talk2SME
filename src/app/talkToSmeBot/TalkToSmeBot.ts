@@ -64,7 +64,7 @@ export class TalkToSmeBot extends bot.TeamsActivityHandler {
 
         this.dialogs.add(new botDialogs.OAuthPrompt(OAUTH_PROMPT, {
             connectionName,
-            text: "Please sign in so I can show you your profile.",
+            text: "Please sign in to schedule a meeting with SME.",
             title: "Sign in",
             timeout: 300000
         }));
@@ -167,9 +167,9 @@ export class TalkToSmeBot extends bot.TeamsActivityHandler {
     }
 
     private async addConversationReference(activity: Activity, magicCode: string = ""): Promise<void> {
-        log("magic code: " + magicCode);
         if (magicCode !== "") {
             log("function: addConversationReference");
+            log("magic code: " + magicCode);
             const conversationReference = bot.TurnContext.getConversationReference(activity);
             if (conversationReference.conversation) {
                 conversationReferences[conversationReference.conversation.id] = { ...conversationReference, magicCode };
@@ -188,14 +188,13 @@ export class TalkToSmeBot extends bot.TeamsActivityHandler {
 
     protected async handleTeamsSigninVerifyState(context: bot.TurnContext, query: bot.SigninStateVerificationQuery): Promise<void> {
         log("handler: handleTeamsSigninVerifyState");
-        await context.sendActivity("Well!, token received");
-        log("context: " + JSON.stringify(context.activity));
-        log("query: " + JSON.stringify(query));
+        //log("context: " + JSON.stringify(context.activity));
+        //log("query: " + JSON.stringify(query));
         await this.addConversationReference(context.activity, query.state);
         await context.sendActivity(`You're now signed in.`);
         const dc = await this.dialogs.createContext(context);
         //await dc.beginDialog(MAIN_WATERFALL_DIALOG);        
-        await dc.continueDialog();
+        await dc.endDialog();
     }
 
     protected async userSignOut(stepContext: botDialogs.WaterfallStepContext) {

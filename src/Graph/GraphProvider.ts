@@ -98,7 +98,7 @@ export class GraphProvider {
                         }
                     });
                 }
-                log("Users: " + JSON.stringify(users));
+                log("searchPeopleBySkills: fetched the users");
                 return users;
             }
         } catch (error) {
@@ -192,7 +192,7 @@ export class GraphProvider {
             result = await axios
                 .post(TOKEN_ENDPOINT, qs.stringify(postData))
                 .then(response => {
-                    console.log("Token success: " + response.data.access_token);
+                    log("Token acquired successfull");
                     return response.data.access_token;
                 })
                 .catch(error => {

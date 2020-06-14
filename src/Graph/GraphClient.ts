@@ -51,10 +51,10 @@ export class GraphClient {
             let apiURL = process.env.SPO_List_URL + "/items/?expand=fields";
             console.log(apiURL);
             let res = await this.graphClient.api(apiURL).get();
-            console.log("list found");
+            log("getListItems: Project list fetched successfull");
             return res;
         } catch (error) {
-            console.log("list not found");
+            console.log("getListItems: Failed to read");
             console.log(error);
             return false;
         }

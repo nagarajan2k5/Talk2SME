@@ -9,7 +9,7 @@ import { createMeetingService } from "../../Services/createMeetingService";
 import { OnlineMeetingInput, OutlookEventInfo } from "../../Models/models";
 import * as moment from 'moment';
 
-import {conversationReferences} from "../talkToSmeBot/TalkToSmeBot"
+import { conversationReferences } from "../talkToSmeBot/TalkToSmeBot"
 
 
 // Initialize debug logging module
@@ -43,7 +43,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
 
     public async onCardButtonClicked(context: bot.TurnContext, value: any): Promise<void> {
         // Handle the Action.Submit action on the adaptive card
-        log("handler: onCardButtonClicked" + JSON.stringify(value));
+        log("handler: onCardButtonClicked");
         let requestor = context.activity.from.name;
         let cardInfo = context.activity.value;
 
@@ -54,23 +54,23 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                     // i.getUserToken()
                     // Get access token for user.if already authenticated, we will get token.
                     // If user is not signed in, send sign in link in messaging extension.
-                    let magicCode = "154895";//context.activity.value?.state || '';
+                    let magicCode = "";//context.activity.value?.state || '';
                     //const conversationReference = bot.TurnContext.getConversationReference(activity);
+
                     let conversationReference;
                     for (conversationReference of Object.values(conversationReferences)) {
-                        if(conversationReference.conversation.id === context.activity.conversation.id){
+                        if (conversationReference.conversation.id === context.activity.conversation.id) {
                             magicCode = conversationReference.magicCode;
                             break;
                         }
                     }
-                    log("Msg Extension magicCode: "+ magicCode);
-                    var tokenResponse = await (context.adapter as any).getUserToken(context, connectionName, magicCode);                  
-                    log("Token JSON: " +JSON.stringify(tokenResponse));
+                    log("Msg Extension magicCode: " + magicCode);
+                    var tokenResponse = await (context.adapter as any).getUserToken(context, connectionName, magicCode);
                     if (!tokenResponse) {
                         log("Msg Extension: Sign in card");
                         const signInLink: any = await (context.adapter as any).getSignInLink(context, connectionName);
                         //send a sign in card!
-                        const attachment = bot.CardFactory.signinCard("Sign In", signInLink, "Please sign in to schedule a meeting with SME");
+                        const attachment = bot.CardFactory.signinCard("Sign in", signInLink, "Please sign in to schedule a meeting with SME");
                         const activity = bot.MessageFactory.attachment(attachment);
                         await context.sendActivity(activity);
                     }
@@ -80,12 +80,11 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                         //Create a test meeting
                         const service = createMeetingService();
                         const startedAt = moment()
-                        log("startedAt" + JSON.stringify(startedAt));
                         const meetingInput: OnlineMeetingInput = {
                             startDateTime: startedAt.add(30, 'm'),
                             endDateTime: startedAt.add(60, 'm'),
-                            subject: "TalkToSME: Online meeting with SME",
-                            smeEmailID: value.parameters.SMEContacts
+                            subject: "TalkToSME: Online meeting with SME - " + (value.parameters.Title ? value.parameters.Title : value.parameters.FullName),
+                            smeEmailID: value.parameters.SMEContacts ? value.parameters.SMEContacts : value.parameters.EmailId
                         };
 
                         const meetingInfo: OutlookEventInfo = await service.createMeeting(meetingInput, tokenResponse.token);
@@ -93,6 +92,7 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                     }
                     break;
                 default:
+                    await context.sendActivity("Default");
                     break;
             }
         }
@@ -136,8 +136,6 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
         let result = new Array<any>();
         try {
             const users = await GraphProvider.searchPeopleBySkills(keyWord);
-            console.log(JSON.stringify(users));
-            log(JSON.stringify(users));
             if (users) {
                 users.forEach(data => {
                     const preview = {
