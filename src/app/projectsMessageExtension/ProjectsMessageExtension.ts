@@ -79,14 +79,17 @@ export default class ProjectsMessageExtension implements IMessagingExtensionMidd
                         await context.sendActivity("Thank you " + requestor + ", we have scheduled the meeting! Please check the calendar");
                         //Create a test meeting
                         const service = createMeetingService();
-                        const startedAt = moment()
+                        let m = moment();
+                        let m1 = moment();
+                        let startedAt = m.minute() || m.second() || m.millisecond() ? m.add(1, 'hour').startOf('hour') : m.startOf('hour');
+                        let endedAt = m1.minute() || m1.second() || m1.millisecond() ? m1.add(1, 'hour').startOf('hour') : m1.startOf('hour');
                         const meetingInput: OnlineMeetingInput = {
-                            startDateTime: startedAt.add(30, 'm'),
-                            endDateTime: startedAt.add(60, 'm'),
+                            startDateTime: startedAt.add(0,'m'),
+                            endDateTime: endedAt.add(30, 'm'),
                             subject: "TalkToSME: Online meeting with SME - " + (value.parameters.Title ? value.parameters.Title : value.parameters.FullName),
                             smeEmailID: value.parameters.SMEContacts ? value.parameters.SMEContacts : value.parameters.EmailId
                         };
-
+                        log(JSON.stringify(meetingInput));
                         const meetingInfo: OutlookEventInfo = await service.createMeeting(meetingInput, tokenResponse.token);
                         //await context.sendActivity(JSON.stringify(meetingInfo));
                     }
