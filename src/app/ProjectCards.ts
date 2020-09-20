@@ -2,7 +2,7 @@
 import * as debug from "debug";
 //import ProjectData = require("../app/CardsSamples/ProjectInfoData.json");
 
-import { GraphProvider } from "../Graph/GraphProvider";
+import { GraphProvider } from "../Graph/GraphProvider"; 
 //logging modulec declared
 const log = debug("msteams");
 
